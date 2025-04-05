@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
 
     public function index()
-    {
-        return view('products.index'); //retornar una lista de productos
+    {   
+        //consulta en la base de datos
+        $listProducts = Product::paginate();
+
+        // dd($listProducts);
+
+        return view('products.index',[
+            'listProducts' => $listProducts
+        ]); //retornar una lista de productos
     }
 
     public function create()
@@ -17,8 +25,11 @@ class ProductController extends Controller
         return view('products.create'); //retorna el formulario para crear un producto
     }
 
-    public function show($name)
-    {
-        return view('products.show'); //retorna el detalle de un producto
+    public function show($id)
+    {   
+        $product = Product::find($id);
+        return view('products.show', [
+            'product' => $product
+        ]); //retorna el detalle de un producto
     }
 }
